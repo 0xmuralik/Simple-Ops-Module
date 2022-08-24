@@ -4,6 +4,30 @@
 
 ## Table of Contents
 
+- [cosmos/ops/v1beta1/types.proto](#cosmos/ops/v1beta1/types.proto)
+    - [NameRecord](#cosmos.ops.v1beta1.NameRecord)
+  
+- [cosmos/ops/v1beta1/genesis.proto](#cosmos/ops/v1beta1/genesis.proto)
+    - [GenesisState](#cosmos.ops.v1beta1.GenesisState)
+  
+- [cosmos/ops/v1beta1/query.proto](#cosmos/ops/v1beta1/query.proto)
+    - [QueryAllRecordsRequest](#cosmos.ops.v1beta1.QueryAllRecordsRequest)
+    - [QueryAllRecordsResponse](#cosmos.ops.v1beta1.QueryAllRecordsResponse)
+    - [QueryRecordRequest](#cosmos.ops.v1beta1.QueryRecordRequest)
+    - [QueryRecordResponse](#cosmos.ops.v1beta1.QueryRecordResponse)
+  
+    - [Query](#cosmos.ops.v1beta1.Query)
+  
+- [cosmos/ops/v1beta1/tx.proto](#cosmos/ops/v1beta1/tx.proto)
+    - [MsgCreateNameRecord](#cosmos.ops.v1beta1.MsgCreateNameRecord)
+    - [MsgCreateResponse](#cosmos.ops.v1beta1.MsgCreateResponse)
+    - [MsgDeleteNameRecord](#cosmos.ops.v1beta1.MsgDeleteNameRecord)
+    - [MsgDeleteResponse](#cosmos.ops.v1beta1.MsgDeleteResponse)
+    - [MsgUpdateNameRecord](#cosmos.ops.v1beta1.MsgUpdateNameRecord)
+    - [MsgUpdateResponse](#cosmos.ops.v1beta1.MsgUpdateResponse)
+  
+    - [Msg](#cosmos.ops.v1beta1.Msg)
+  
 - [ethermint/crypto/v1/ethsecp256k1/keys.proto](#ethermint/crypto/v1/ethsecp256k1/keys.proto)
     - [PrivKey](#ethermint.crypto.v1.ethsecp256k1.PrivKey)
     - [PubKey](#ethermint.crypto.v1.ethsecp256k1.PubKey)
@@ -224,6 +248,278 @@
     - [Msg](#vulcanize.nameservice.v1beta1.Msg)
   
 - [Scalar Value Types](#scalar-value-types)
+
+
+
+<a name="cosmos/ops/v1beta1/types.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/ops/v1beta1/types.proto
+
+
+
+<a name="cosmos.ops.v1beta1.NameRecord"></a>
+
+### NameRecord
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+| `name` | [string](#string) |  |  |
+| `age` | [uint64](#uint64) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/ops/v1beta1/genesis.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/ops/v1beta1/genesis.proto
+
+
+
+<a name="cosmos.ops.v1beta1.GenesisState"></a>
+
+### GenesisState
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `records` | [NameRecord](#cosmos.ops.v1beta1.NameRecord) | repeated |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/ops/v1beta1/query.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/ops/v1beta1/query.proto
+
+
+
+<a name="cosmos.ops.v1beta1.QueryAllRecordsRequest"></a>
+
+### QueryAllRecordsRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `pagination` | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  |  |
+
+
+
+
+
+
+<a name="cosmos.ops.v1beta1.QueryAllRecordsResponse"></a>
+
+### QueryAllRecordsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `records` | [NameRecord](#cosmos.ops.v1beta1.NameRecord) | repeated |  |
+| `pagination` | [cosmos.base.query.v1beta1.PageResponse](#cosmos.base.query.v1beta1.PageResponse) |  |  |
+
+
+
+
+
+
+<a name="cosmos.ops.v1beta1.QueryRecordRequest"></a>
+
+### QueryRecordRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="cosmos.ops.v1beta1.QueryRecordResponse"></a>
+
+### QueryRecordResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `record` | [NameRecord](#cosmos.ops.v1beta1.NameRecord) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="cosmos.ops.v1beta1.Query"></a>
+
+### Query
+
+
+| Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
+| ----------- | ------------ | ------------- | ------------| ------- | -------- |
+| `ListRecords` | [QueryAllRecordsRequest](#cosmos.ops.v1beta1.QueryAllRecordsRequest) | [QueryAllRecordsResponse](#cosmos.ops.v1beta1.QueryAllRecordsResponse) |  | GET|/cosmos/ops/v1beta1/records|
+| `GetRecord` | [QueryRecordRequest](#cosmos.ops.v1beta1.QueryRecordRequest) | [QueryRecordResponse](#cosmos.ops.v1beta1.QueryRecordResponse) |  | GET|/cosmos/ops/v1beta1/record/{id}|
+
+ <!-- end services -->
+
+
+
+<a name="cosmos/ops/v1beta1/tx.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## cosmos/ops/v1beta1/tx.proto
+
+
+
+<a name="cosmos.ops.v1beta1.MsgCreateNameRecord"></a>
+
+### MsgCreateNameRecord
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `name` | [string](#string) |  |  |
+| `age` | [uint64](#uint64) |  |  |
+
+
+
+
+
+
+<a name="cosmos.ops.v1beta1.MsgCreateResponse"></a>
+
+### MsgCreateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+| `name` | [string](#string) |  |  |
+| `age` | [uint64](#uint64) |  |  |
+
+
+
+
+
+
+<a name="cosmos.ops.v1beta1.MsgDeleteNameRecord"></a>
+
+### MsgDeleteNameRecord
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="cosmos.ops.v1beta1.MsgDeleteResponse"></a>
+
+### MsgDeleteResponse
+
+
+
+
+
+
+
+<a name="cosmos.ops.v1beta1.MsgUpdateNameRecord"></a>
+
+### MsgUpdateNameRecord
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+| `name` | [string](#string) |  |  |
+| `age` | [uint64](#uint64) |  |  |
+
+
+
+
+
+
+<a name="cosmos.ops.v1beta1.MsgUpdateResponse"></a>
+
+### MsgUpdateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `id` | [string](#string) |  |  |
+| `name` | [string](#string) |  |  |
+| `age` | [uint64](#uint64) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="cosmos.ops.v1beta1.Msg"></a>
+
+### Msg
+
+
+| Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
+| ----------- | ------------ | ------------- | ------------| ------- | -------- |
+| `Create` | [MsgCreateNameRecord](#cosmos.ops.v1beta1.MsgCreateNameRecord) | [MsgCreateResponse](#cosmos.ops.v1beta1.MsgCreateResponse) |  | |
+| `Update` | [MsgUpdateNameRecord](#cosmos.ops.v1beta1.MsgUpdateNameRecord) | [MsgUpdateResponse](#cosmos.ops.v1beta1.MsgUpdateResponse) |  | |
+| `Delete` | [MsgDeleteNameRecord](#cosmos.ops.v1beta1.MsgDeleteNameRecord) | [MsgDeleteResponse](#cosmos.ops.v1beta1.MsgDeleteResponse) |  | |
+
+ <!-- end services -->
 
 
 
