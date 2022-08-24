@@ -30,6 +30,7 @@ func (k Keeper) GetRecordCounter(ctx sdk.Context) uint64 {
 	counter := binary.LittleEndian.Uint64(bz)
 	return counter
 }
+
 func (k Keeper) SetRecordCounter(ctx sdk.Context, counter uint64) {
 	store := ctx.KVStore(k.storeKey)
 	b := make([]byte, 8)
@@ -53,6 +54,14 @@ func (k Keeper) SetNameRecord(ctx sdk.Context, name string, age uint64) types.Na
 	}
 	store.Set([]byte(id), k.cdc.MustMarshal(&record))
 	k.SetRecordCounter(ctx, counter+1)
+	return record
+}
+
+func (k Keeper) GetNameRecordById(ctx sdk.Context, id string) types.NameRecord {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get([]byte(id))
+	var record types.NameRecord
+	k.cdc.MustUnmarshal(bz, &record)
 	return record
 }
 
