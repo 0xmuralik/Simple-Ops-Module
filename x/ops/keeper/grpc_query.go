@@ -11,7 +11,7 @@ type Querier struct {
 	Keeper
 }
 
-// NewMsgServerImpl returns an implementation of the ops MsgServer interface for the provided Keeper.
+// NewQuerierImpl returns an implementation of the ops QueryServer interface for the provided Keeper.
 func NewQuerierImpl(keeper Keeper) types.QueryServer {
 	return &Querier{Keeper: keeper}
 }

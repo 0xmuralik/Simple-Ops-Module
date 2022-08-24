@@ -300,6 +300,7 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | `records` | [NameRecord](#cosmos.ops.v1beta1.NameRecord) | repeated |  |
+| `recordCounter` | [uint64](#uint64) |  |  |
 
 
 
