@@ -3,7 +3,7 @@ package cosmos.ops.v1beta1;
 
 import "google/protobuf/any.proto";
 
-option go_package = "github.com/cosmos/cosmos-sdk/x/ops";
+option go_package = "github.com/tharsis/ethermint/x/ops/types";
 
 message NameRecord{
     string id =1;

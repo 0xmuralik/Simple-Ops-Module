@@ -3,7 +3,8 @@ package cosmos.ops.v1beta1;
 
 import "cosmos/ops/v1beta1/types.proto";
 
-option go_package = "github.com/cosmos/cosmos-sdk/x/ops";
+option go_package = "github.com/tharsis/ethermint/x/auction/types";
+
 
 message GenesisState{
     repeated cosmos.ops.v1beta1.NameRecord records=1;

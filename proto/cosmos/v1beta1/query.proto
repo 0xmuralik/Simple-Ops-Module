@@ -5,7 +5,8 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "google/api/annotations.proto";
 import "cosmos/ops/v1beta1/types.proto";
 
-option go_package = "github.com/cosmos/cosmos-sdk/x/ops";
+option go_package = "github.com/tharsis/ethermint/x/ops/types";
+
 
 service Query{
     rpc ListRecords(QueryAllRecordsRequest) returns (QueryAllRecordsResponse) {
