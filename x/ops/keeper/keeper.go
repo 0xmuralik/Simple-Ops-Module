@@ -24,34 +24,35 @@ func getRecordId(index uint64) string {
 	return fmt.Sprintf("%s%d", RecordIDPrefix, index)
 }
 
-func (k Keeper) getRecordCounter(ctx sdk.Context) uint64 {
+func (k Keeper) GetRecordCounter(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(RecordCounterKey)
 	counter := binary.LittleEndian.Uint64(bz)
 	return counter
 }
-
-func (k Keeper) incrementRecordCounter(ctx sdk.Context) {
+func (k Keeper) SetRecordCounter(ctx sdk.Context, counter uint64) {
 	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(RecordCounterKey)
-	counter := binary.LittleEndian.Uint64(bz)
-	counter++
-
 	b := make([]byte, 8)
 	binary.LittleEndian.PutUint64(b, counter)
 	store.Set(RecordCounterKey, b)
 }
 
+func (k Keeper) SaveRecord(ctx sdk.Context, record *types.NameRecord) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set([]byte(record.Id), k.cdc.MustMarshal(record))
+}
+
 func (k Keeper) SetNameRecord(ctx sdk.Context, name string, age uint64) types.NameRecord {
 	store := ctx.KVStore(k.storeKey)
-	id := getRecordId(k.getRecordCounter(ctx))
+	counter := k.GetRecordCounter(ctx)
+	id := getRecordId(counter)
 	record := types.NameRecord{
 		Id:   id,
 		Name: name,
 		Age:  age,
 	}
 	store.Set([]byte(id), k.cdc.MustMarshal(&record))
-	k.incrementRecordCounter(ctx)
+	k.SetRecordCounter(ctx, counter+1)
 	return record
 }
 
@@ -69,4 +70,21 @@ func (k Keeper) UpdateNameRecord(ctx sdk.Context, id string, name string, age ui
 func (k Keeper) DeleteRecord(ctx sdk.Context, id string) {
 	store := ctx.KVStore(k.storeKey)
 	store.Delete([]byte(id))
+}
+
+func (k Keeper) ListRecords(ctx sdk.Context) []*types.NameRecord {
+	var records []*types.NameRecord
+
+	store := ctx.KVStore(k.storeKey)
+	itr := sdk.KVStorePrefixIterator(store, []byte(RecordIDPrefix))
+	defer itr.Close()
+	for ; itr.Valid(); itr.Next() {
+		bz := store.Get(itr.Key())
+		if bz != nil {
+			var record types.NameRecord
+			k.cdc.MustUnmarshal(bz, &record)
+			records = append(records, &record)
+		}
+	}
+	return records
 }
