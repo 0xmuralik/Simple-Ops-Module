@@ -1,0 +1,10 @@
+syntax = "proto3";
+package cosmos.ops.v1beta1;
+
+import "cosmos/ops/v1beta1/types.proto";
+
+option go_package = "github.com/cosmos/cosmos-sdk/x/ops";
+
+message GenesisState{
+    repeated cosmos.ops.v1beta1.NameRecord records=1;
+}

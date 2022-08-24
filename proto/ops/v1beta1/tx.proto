@@ -1,0 +1,41 @@
+syntax = "proto3";
+package cosmos.ops.v1beta1;
+
+option go_package = "github.com/cosmos/cosmos-sdk/x/ops";
+
+import "cosmos/msg/v1/msg.proto";
+
+service Msg {
+    rpc Create(MsgCreateNameRecord) returns (MsgCreateResponse);
+    rpc Update(MsgUpdateNameRecord) returns (MsgUpdateResponse);
+    rpc Delete(MsgDeleteNameRecord) returns (MsgDeleteResponse);
+}
+
+message MsgCreateNameRecord{
+    string name=1;
+    uint64 age=2;
+}
+
+message MsgCreateResponse{
+    string id=1;
+    string name=2;
+    uint64 age=3;
+}
+
+message MsgUpdateNameRecord{
+    string id=1;
+    string name=2;
+    uint64 age=3;
+}
+
+message MsgUpdateResponse{
+    string id=1;
+    string name=2;
+    uint64 age=3;
+}
+
+message MsgDeleteNameRecord{
+    string id=1;
+}
+
+message MsgDeleteResponse{}

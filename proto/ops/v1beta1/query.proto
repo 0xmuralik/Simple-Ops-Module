@@ -1,0 +1,31 @@
+syntax = "proto3";
+package cosmos.ops.v1beta1;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "google/api/annotations.proto";
+import "cosmos/ops/v1beta1/types.proto";
+
+option go_package = "github.com/cosmos/cosmos-sdk/x/ops";
+
+service Query{
+    rpc ListRecords(QueryAllRecordsRequest) returns (QueryAllRecordsResponse) {
+        option (google.api.http).get ="/cosmos/ops/v1beta1/records";
+    }
+    rpc GetRecord(QueryRecordRequest) returns (QueryRecordResponse){
+        option (google.api.http).get ="/cosmos/ops/v1beta1/record/{id}";
+    }
+}
+
+message QueryAllRecordsRequest{
+    cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+message QueryAllRecordsResponse{
+    repeated cosmos.ops.v1beta1.NameRecord records =1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+message QueryRecordRequest{
+    string id =1;
+}
+message QueryRecordResponse{
+    cosmos.ops.v1beta1.NameRecord record =1;
+}
