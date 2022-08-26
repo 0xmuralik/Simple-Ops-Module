@@ -10,8 +10,9 @@ service Msg {
 }
 
 message MsgCreateNameRecord{
-    string name=1;
-    uint64 age=2;
+    string signer =1;
+    string name=2;
+    uint64 age=3;
 }
 
 message MsgCreateResponse{
@@ -21,9 +22,10 @@ message MsgCreateResponse{
 }
 
 message MsgUpdateNameRecord{
-    string id=1;
-    string name=2;
-    uint64 age=3;
+    string signer =1;
+    string id=2;
+    string name=3;
+    uint64 age=4;
 }
 
 message MsgUpdateResponse{
@@ -33,7 +35,8 @@ message MsgUpdateResponse{
 }
 
 message MsgDeleteNameRecord{
-    string id=1;
+    string signer=1;
+    string id=2;
 }
 
 message MsgDeleteResponse{}

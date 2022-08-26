@@ -419,6 +419,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| `signer` | [string](#string) |  |  |
 | `name` | [string](#string) |  |  |
 | `age` | [uint64](#uint64) |  |  |
 
@@ -452,6 +453,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| `signer` | [string](#string) |  |  |
 | `id` | [string](#string) |  |  |
 
 
@@ -477,6 +479,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| `signer` | [string](#string) |  |  |
 | `id` | [string](#string) |  |  |
 | `name` | [string](#string) |  |  |
 | `age` | [uint64](#uint64) |  |  |
