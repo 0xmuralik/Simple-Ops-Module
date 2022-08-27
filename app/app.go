@@ -127,6 +127,9 @@ import (
 	"github.com/tharsis/ethermint/x/nameservice"
 	nameservicekeeper "github.com/tharsis/ethermint/x/nameservice/keeper"
 	nameservicetypes "github.com/tharsis/ethermint/x/nameservice/types"
+	"github.com/tharsis/ethermint/x/ops"
+	opskeeper "github.com/tharsis/ethermint/x/ops/keeper"
+	opstypes "github.com/tharsis/ethermint/x/ops/types"
 )
 
 func init() {
@@ -176,6 +179,7 @@ var (
 		auction.AppModuleBasic{},
 		bond.AppModuleBasic{},
 		nameservice.AppModuleBasic{},
+		ops.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -194,6 +198,7 @@ var (
 		nameservicetypes.RecordRentModuleAccountName:    nil,
 		nameservicetypes.AuthorityRentModuleAccountName: nil,
 		bondtypes.ModuleName:                            nil,
+		opstypes.ModuleName:                             nil,
 	}
 
 	// module accounts that are allowed to receive tokens
@@ -254,6 +259,7 @@ type EthermintApp struct {
 	BondKeeper              bondkeeper.Keeper
 	NameServiceKeeper       nameservicekeeper.Keeper
 	NameServiceRecordKeeper nameservicekeeper.RecordKeeper
+	OpsKeeper               opskeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -297,6 +303,7 @@ func NewEthermintApp(
 		auctiontypes.StoreKey,
 		bondtypes.StoreKey,
 		nameservicetypes.StoreKey,
+		opstypes.StoreKey,
 	)
 
 	// Add the EVM transient store key
@@ -440,6 +447,8 @@ func NewEthermintApp(
 		[]bondtypes.BondUsageKeeper{app.NameServiceRecordKeeper}, keys[bondtypes.StoreKey], app.GetSubspace(bondtypes.ModuleName),
 	)
 
+	app.OpsKeeper = opskeeper.NewKeeper(appCodec, keys[opstypes.StoreKey])
+
 	app.NameServiceKeeper = nameservicekeeper.NewKeeper(
 		appCodec, app.AccountKeeper, app.BankKeeper,
 		app.NameServiceRecordKeeper, app.BondKeeper, app.AuctionKeeper,
@@ -542,6 +551,7 @@ func NewEthermintApp(
 		auction.NewAppModule(appCodec, app.AuctionKeeper),
 		bond.NewAppModule(appCodec, app.BondKeeper),
 		nameservice.NewAppModule(app.NameServiceKeeper),
+		ops.NewAppModule(appCodec, app.OpsKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -576,6 +586,7 @@ func NewEthermintApp(
 		auctiontypes.ModuleName,
 		bondtypes.ModuleName,
 		nameservicetypes.ModuleName,
+		opstypes.ModuleName,
 	)
 
 	// NOTE: fee market module must go last in order to retrieve the block gas used.
@@ -605,6 +616,7 @@ func NewEthermintApp(
 		auctiontypes.ModuleName,
 		bondtypes.ModuleName,
 		nameservicetypes.ModuleName,
+		opstypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -638,6 +650,7 @@ func NewEthermintApp(
 		auctiontypes.ModuleName,
 		bondtypes.ModuleName,
 		nameservicetypes.ModuleName,
+		opstypes.ModuleName,
 
 		// NOTE: crisis module must go at the end to check for invariants on each module
 		crisistypes.ModuleName,

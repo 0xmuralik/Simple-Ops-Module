@@ -20,6 +20,14 @@ type Keeper struct {
 	cdc      codec.BinaryCodec
 }
 
+// NewKeeper creates new instances of the ops Keeper
+func NewKeeper(cdc codec.BinaryCodec, storeKey storetypes.StoreKey) Keeper {
+	return Keeper{
+		storeKey: storeKey,
+		cdc:      cdc,
+	}
+}
+
 func getRecordID(index uint64) string {
 	return fmt.Sprintf("%s%d", RecordIDPrefix, index)
 }
