@@ -18,7 +18,7 @@ func GetQueryCmd() *cobra.Command {
 	}
 
 	opsQueryCmd.AddCommand(
-		GetRecordByIdCmd(),
+		GetRecordByIDCmd(),
 		ListRecorsCmd(),
 	)
 
@@ -26,7 +26,7 @@ func GetQueryCmd() *cobra.Command {
 }
 
 // GetRecordByIdCmd gets record by Id
-func GetRecordByIdCmd() *cobra.Command {
+func GetRecordByIDCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "Record by id",
 		Args:  cobra.ExactArgs(1),

@@ -26,7 +26,7 @@ func (q Querier) ListRecords(c context.Context, _ *types.QueryAllRecordsRequest)
 
 func (q Querier) GetRecord(c context.Context, req *types.QueryRecordRequest) (*types.QueryRecordResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	record := q.Keeper.GetNameRecordById(ctx, req.Id)
+	record := q.Keeper.GetNameRecordByID(ctx, req.Id)
 	return &types.QueryRecordResponse{
 		Record: &record,
 	}, nil

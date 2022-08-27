@@ -20,7 +20,7 @@ type Keeper struct {
 	cdc      codec.BinaryCodec
 }
 
-func getRecordId(index uint64) string {
+func getRecordID(index uint64) string {
 	return fmt.Sprintf("%s%d", RecordIDPrefix, index)
 }
 
@@ -46,7 +46,7 @@ func (k Keeper) SaveRecord(ctx sdk.Context, record *types.NameRecord) {
 func (k Keeper) SetNameRecord(ctx sdk.Context, name string, age uint64) types.NameRecord {
 	store := ctx.KVStore(k.storeKey)
 	counter := k.GetRecordCounter(ctx)
-	id := getRecordId(counter)
+	id := getRecordID(counter)
 	record := types.NameRecord{
 		Id:   id,
 		Name: name,
@@ -57,7 +57,7 @@ func (k Keeper) SetNameRecord(ctx sdk.Context, name string, age uint64) types.Na
 	return record
 }
 
-func (k Keeper) GetNameRecordById(ctx sdk.Context, id string) types.NameRecord {
+func (k Keeper) GetNameRecordByID(ctx sdk.Context, id string) types.NameRecord {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get([]byte(id))
 	var record types.NameRecord
