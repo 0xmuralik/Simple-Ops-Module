@@ -13,7 +13,7 @@ import (
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgCreateNameRecord{}, "ops/MsgCreateNameRecord", nil)
 	cdc.RegisterConcrete(&MsgUpdateNameRecord{}, "ops/MsgUpdateNameRecord", nil)
-	cdc.RegisterConcrete(&MsgDeleteNameRecord{}, "bond/MsgDeleteNameRecord", nil)
+	cdc.RegisterConcrete(&MsgDeleteNameRecord{}, "ops/MsgDeleteNameRecord", nil)
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {

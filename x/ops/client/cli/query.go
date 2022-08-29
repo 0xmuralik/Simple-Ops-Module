@@ -28,7 +28,7 @@ func GetQueryCmd() *cobra.Command {
 // GetRecordByIdCmd gets record by Id
 func GetRecordByIDCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "Record by id",
+		Use:   "record [id]",
 		Args:  cobra.ExactArgs(1),
 		Short: "Get record by id",
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -54,7 +54,7 @@ func GetRecordByIDCmd() *cobra.Command {
 // ListRecorsCmd lists all existing records
 func ListRecorsCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "List all records",
+		Use:   "list",
 		Args:  cobra.NoArgs,
 		Short: "List all records",
 		RunE: func(cmd *cobra.Command, args []string) error {

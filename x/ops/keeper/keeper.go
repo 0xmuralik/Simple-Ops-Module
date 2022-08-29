@@ -44,6 +44,9 @@ func (k Keeper) SetRecordCounter(ctx sdk.Context, counter uint64) {
 	b := make([]byte, 8)
 	binary.LittleEndian.PutUint64(b, counter)
 	store.Set(RecordCounterKey, b)
+	bz := store.Get(RecordCounterKey)
+	counterGet := binary.LittleEndian.Uint64(bz)
+	fmt.Println("Counter: ", counterGet)
 }
 
 func (k Keeper) SaveRecord(ctx sdk.Context, record *types.NameRecord) {
@@ -53,13 +56,19 @@ func (k Keeper) SaveRecord(ctx sdk.Context, record *types.NameRecord) {
 
 func (k Keeper) SetNameRecord(ctx sdk.Context, name string, age uint64) types.NameRecord {
 	store := ctx.KVStore(k.storeKey)
+	fmt.Println("In keeper")
 	counter := k.GetRecordCounter(ctx)
+	fmt.Println("Counter: ", counter)
 	id := getRecordID(counter)
+	fmt.Println("id: ", id)
 	record := types.NameRecord{
 		Id:   id,
 		Name: name,
 		Age:  age,
 	}
+
+	fmt.Println("record: ", record)
+
 	store.Set([]byte(id), k.cdc.MustMarshal(&record))
 	k.SetRecordCounter(ctx, counter+1)
 	return record

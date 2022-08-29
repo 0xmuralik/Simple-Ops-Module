@@ -21,7 +21,11 @@ func NewTxCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	opsTxCmd.AddCommand()
+	opsTxCmd.AddCommand(
+		NewCreateRecordCmd(),
+		UpdateRecordCmd(),
+		DeleteRecordCmd(),
+	)
 
 	return opsTxCmd
 }

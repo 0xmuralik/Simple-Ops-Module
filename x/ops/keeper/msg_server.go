@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tharsis/ethermint/x/ops/types"
@@ -18,6 +19,7 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 func (k msgServer) Create(c context.Context, msg *types.MsgCreateNameRecord) (*types.MsgCreateResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
+	fmt.Println("msg: ", msg)
 	resp := k.Keeper.SetNameRecord(ctx, msg.Name, msg.Age)
 	return &types.MsgCreateResponse{
 		Id:   resp.Id,
