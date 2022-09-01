@@ -15,6 +15,9 @@ service Query{
     rpc GetRecord(QueryRecordRequest) returns (QueryRecordResponse){
         option (google.api.http).get ="/cosmos/ops/v1beta1/record/{id}";
     }
+    rpc GetRecordCounter(QueryRecordCounterRequest) returns (QueryRecordCounterResponse) {
+        option (google.api.http).get ="/cosmos/ops/v1beta1/counter";
+    }
 }
 
 message QueryAllRecordsRequest{
@@ -29,4 +32,10 @@ message QueryRecordRequest{
 }
 message QueryRecordResponse{
     cosmos.ops.v1beta1.NameRecord record =1;
+}
+
+message QueryRecordCounterRequest{}
+
+message QueryRecordCounterResponse{
+    uint64 counter =1;
 }

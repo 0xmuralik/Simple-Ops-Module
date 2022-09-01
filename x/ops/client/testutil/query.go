@@ -96,6 +96,34 @@ func (s *IntegrationTestSuite) creatNameRecord(name string, age uint64) {
 	sr.NoError(err)
 }
 
+func (s *IntegrationTestSuite) getRecordCounter() uint64 {
+	val := s.network.Validators[0]
+	sr := s.Require()
+
+	out, err := clitestutil.ExecTestCLICmd(val.ClientCtx, cli.GetRecordCounterCmd(), []string{fmt.Sprintf("--%s=json", tmcli.OutputFlag)})
+	sr.NoError(err)
+
+	var counterResp types.QueryRecordCounterResponse
+	err = val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &counterResp)
+	sr.NoError(err)
+
+	return counterResp.Counter
+}
+
+func (s *IntegrationTestSuite) getRecordList() []*types.NameRecord {
+	val := s.network.Validators[0]
+	sr := s.Require()
+
+	out, err := clitestutil.ExecTestCLICmd(val.ClientCtx, cli.ListRecorsCmd(), []string{fmt.Sprintf("--%s=json", tmcli.OutputFlag)})
+	sr.NoError(err)
+
+	var recordsResp types.QueryAllRecordsResponse
+	err = val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &recordsResp)
+	sr.NoError(err)
+
+	return recordsResp.Records
+}
+
 func (s *IntegrationTestSuite) TestListNameRecords() {
 	val := s.network.Validators[0]
 
@@ -111,12 +139,10 @@ func (s *IntegrationTestSuite) TestListNameRecords() {
 			"2 records",
 			[]*types.NameRecord{
 				{
-					Id:   "Record-0",
 					Name: "Murali",
 					Age:  22,
 				},
 				{
-					Id:   "Record-1",
 					Name: "Sai",
 					Age:  28,
 				},
@@ -127,8 +153,10 @@ func (s *IntegrationTestSuite) TestListNameRecords() {
 	for _, tc := range testCases {
 		s.Run(fmt.Sprintf("Case %s", tc.name), func() {
 			clientCtx := val.ClientCtx
+			listBefore := s.getRecordList()
 			for _, record := range tc.records {
 				s.creatNameRecord(record.Name, record.Age)
+				record.Id = fmt.Sprintf("Record-%d", s.getRecordCounter()-1)
 			}
 			cmd := cli.ListRecorsCmd()
 			args := []string{fmt.Sprintf("--%s=json", tmcli.OutputFlag)}
@@ -137,7 +165,8 @@ func (s *IntegrationTestSuite) TestListNameRecords() {
 			var queryResponse types.QueryAllRecordsResponse
 			err = clientCtx.Codec.UnmarshalJSON(out.Bytes(), &queryResponse)
 			s.Require().NoError(err)
-			s.Require().Equal(tc.records, queryResponse.Records)
+			listAfter := append(listBefore, tc.records...)
+			s.Require().Equal(listAfter, queryResponse.Records)
 		})
 	}
 }
@@ -166,7 +195,6 @@ func (s *IntegrationTestSuite) TestGetRecordByID() {
 	for _, tc := range testCases {
 		s.Run(fmt.Sprintf("Case %s", tc.name), func() {
 			clientCtx := val.ClientCtx
-			s.creatNameRecord(tc.record.Name, tc.record.Age)
 
 			cmd := cli.GetRecordByIDCmd()
 			args := []string{

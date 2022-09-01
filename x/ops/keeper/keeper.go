@@ -89,8 +89,11 @@ func (k Keeper) UpdateNameRecord(ctx sdk.Context, id string, name string, age ui
 		Name: name,
 		Age:  age,
 	}
-	store.Set([]byte(record.Id), k.cdc.MustMarshal(&record))
-	return record
+	if store.Has([]byte(id)) {
+		store.Set([]byte(id), k.cdc.MustMarshal(&record))
+		return record
+	}
+	return types.NameRecord{}
 }
 
 func (k Keeper) DeleteRecord(ctx sdk.Context, id string) {

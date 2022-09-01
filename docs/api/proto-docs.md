@@ -13,6 +13,8 @@
 - [cosmos/ops/v1beta1/query.proto](#cosmos/ops/v1beta1/query.proto)
     - [QueryAllRecordsRequest](#cosmos.ops.v1beta1.QueryAllRecordsRequest)
     - [QueryAllRecordsResponse](#cosmos.ops.v1beta1.QueryAllRecordsResponse)
+    - [QueryRecordCounterRequest](#cosmos.ops.v1beta1.QueryRecordCounterRequest)
+    - [QueryRecordCounterResponse](#cosmos.ops.v1beta1.QueryRecordCounterResponse)
     - [QueryRecordRequest](#cosmos.ops.v1beta1.QueryRecordRequest)
     - [QueryRecordResponse](#cosmos.ops.v1beta1.QueryRecordResponse)
   
@@ -354,6 +356,31 @@
 
 
 
+<a name="cosmos.ops.v1beta1.QueryRecordCounterRequest"></a>
+
+### QueryRecordCounterRequest
+
+
+
+
+
+
+
+<a name="cosmos.ops.v1beta1.QueryRecordCounterResponse"></a>
+
+### QueryRecordCounterResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `counter` | [uint64](#uint64) |  |  |
+
+
+
+
+
+
 <a name="cosmos.ops.v1beta1.QueryRecordRequest"></a>
 
 ### QueryRecordRequest
@@ -399,6 +426,7 @@
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
 | `ListRecords` | [QueryAllRecordsRequest](#cosmos.ops.v1beta1.QueryAllRecordsRequest) | [QueryAllRecordsResponse](#cosmos.ops.v1beta1.QueryAllRecordsResponse) |  | GET|/cosmos/ops/v1beta1/records|
 | `GetRecord` | [QueryRecordRequest](#cosmos.ops.v1beta1.QueryRecordRequest) | [QueryRecordResponse](#cosmos.ops.v1beta1.QueryRecordResponse) |  | GET|/cosmos/ops/v1beta1/record/{id}|
+| `GetRecordCounter` | [QueryRecordCounterRequest](#cosmos.ops.v1beta1.QueryRecordCounterRequest) | [QueryRecordCounterResponse](#cosmos.ops.v1beta1.QueryRecordCounterResponse) |  | GET|/cosmos/ops/v1beta1/counter|
 
  <!-- end services -->
 

@@ -23,7 +23,7 @@ func (s *IntegrationTestSuite) TestTxCreateNameRecord() {
 	}{
 		{
 			"create name record",
-			"Murali",
+			"CliCreateTest",
 			22,
 			false,
 		},
@@ -31,6 +31,7 @@ func (s *IntegrationTestSuite) TestTxCreateNameRecord() {
 
 	for _, tc := range testCases {
 		s.Run(fmt.Sprintf("Case %s", tc.testName), func() {
+			counter := s.getRecordCounter()
 			clientCtx := val.ClientCtx
 			cmd := cli.NewCreateRecordCmd()
 			args := []string{
@@ -54,7 +55,7 @@ func (s *IntegrationTestSuite) TestTxCreateNameRecord() {
 				sr.Zero(d.Code)
 
 				queryArgs := []string{
-					"Record-0",
+					fmt.Sprintf("Record-%d", counter),
 					fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 				}
 				queryOut, err := clitestutil.ExecTestCLICmd(clientCtx, cli.GetRecordByIDCmd(), queryArgs)
@@ -64,7 +65,7 @@ func (s *IntegrationTestSuite) TestTxCreateNameRecord() {
 				err = clientCtx.Codec.UnmarshalJSON(queryOut.Bytes(), &queryResponse)
 				sr.NoError(err)
 
-				sr.Equal(queryResponse, types.QueryRecordResponse{Record: &types.NameRecord{Id: "Record-0", Name: tc.name, Age: tc.age}})
+				sr.Equal(queryResponse, types.QueryRecordResponse{Record: &types.NameRecord{Id: fmt.Sprintf("Record-%d", counter), Name: tc.name, Age: tc.age}})
 			}
 		})
 	}
@@ -79,19 +80,19 @@ func (s *IntegrationTestSuite) TestTxUpdateRecord() {
 		id       string
 		name     string
 		age      uint64
-		err      bool
+		success  bool
 	}{
 		{
-			"update record",
-			"Record-0",
+			"wrong id",
+			fmt.Sprintf("Record-%d", s.getRecordCounter()+1),
 			"Sai",
 			22,
 			false,
 		},
 		{
-			"wrong id",
-			"Record-1",
-			"Sai",
+			"update record",
+			fmt.Sprintf("Record-%d", s.getRecordCounter()-1),
+			"Updated",
 			22,
 			true,
 		},
@@ -101,8 +102,6 @@ func (s *IntegrationTestSuite) TestTxUpdateRecord() {
 		s.Run(fmt.Sprintf("Case %s", tc.testName), func() {
 			clientCtx := val.ClientCtx
 			cmd := cli.UpdateRecordCmd()
-
-			s.creatNameRecord("Murali", 22)
 			args := []string{
 				tc.id,
 				tc.name,
@@ -114,28 +113,28 @@ func (s *IntegrationTestSuite) TestTxUpdateRecord() {
 				fmt.Sprintf("--%s=%s", flags.FlagFees, fmt.Sprintf("3%s", s.cfg.BondDenom)),
 			}
 			out, err := clitestutil.ExecTestCLICmd(clientCtx, cmd, args)
-			if tc.err {
-				sr.Error(err)
+			sr.NoError(err)
+			var d sdk.TxResponse
+			err = val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &d)
+			sr.Nil(err)
+			sr.NoError(err)
+			sr.Zero(d.Code)
+
+			queryArgs := []string{
+				tc.id,
+				fmt.Sprintf("--%s=json", tmcli.OutputFlag),
+			}
+			queryOut, err := clitestutil.ExecTestCLICmd(clientCtx, cli.GetRecordByIDCmd(), queryArgs)
+			sr.NoError(err)
+
+			var queryResponse types.QueryRecordResponse
+			err = clientCtx.Codec.UnmarshalJSON(queryOut.Bytes(), &queryResponse)
+			sr.NoError(err)
+
+			if tc.success {
+				sr.Equal(queryResponse, types.QueryRecordResponse{Record: &types.NameRecord{Id: tc.id, Name: tc.name, Age: tc.age}})
 			} else {
-				sr.NoError(err)
-				var d sdk.TxResponse
-				err = val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &d)
-				sr.Nil(err)
-				sr.NoError(err)
-				sr.Zero(d.Code)
-
-				queryArgs := []string{
-					"Record-0",
-					fmt.Sprintf("--%s=json", tmcli.OutputFlag),
-				}
-				queryOut, err := clitestutil.ExecTestCLICmd(clientCtx, cli.GetRecordByIDCmd(), queryArgs)
-				sr.NoError(err)
-
-				var queryResponse types.QueryRecordResponse
-				err = clientCtx.Codec.UnmarshalJSON(queryOut.Bytes(), &queryResponse)
-				sr.NoError(err)
-
-				sr.Equal(queryResponse, types.QueryRecordResponse{Record: &types.NameRecord{Id: "Record-0", Name: tc.name, Age: tc.age}})
+				sr.NotEqual(queryResponse, types.QueryRecordResponse{Record: &types.NameRecord{Id: tc.id, Name: tc.name, Age: tc.age}})
 			}
 		})
 	}
@@ -155,19 +154,13 @@ func (s *IntegrationTestSuite) TestTxDeleteRecord() {
 			"Record-0",
 			false,
 		},
-		{
-			"wrong id",
-			"Record-10",
-			true,
-		},
 	}
 
 	for _, tc := range testCases {
 		s.Run(fmt.Sprintf("Case %s", tc.testName), func() {
 			clientCtx := val.ClientCtx
 			cmd := cli.DeleteRecordCmd()
-
-			s.creatNameRecord("Murali", 22)
+			lenBefore := len(s.getRecordList())
 			args := []string{
 				tc.id,
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, s.accountName),
@@ -187,15 +180,8 @@ func (s *IntegrationTestSuite) TestTxDeleteRecord() {
 				sr.Nil(err)
 				sr.NoError(err)
 				sr.Zero(d.Code)
-
-				queryArgs := []string{fmt.Sprintf("--%s=json", tmcli.OutputFlag)}
-				queryOut, err := clitestutil.ExecTestCLICmd(clientCtx, cli.ListRecorsCmd(), queryArgs)
-				sr.NoError(err)
-
-				var queryResponse types.QueryAllRecordsResponse
-				err = clientCtx.Codec.UnmarshalJSON(queryOut.Bytes(), &queryResponse)
-				sr.NoError(err)
-				sr.Equal(0, len(queryResponse.Records))
+				lenAfter := len(s.getRecordList())
+				sr.Equal(lenBefore, lenAfter+1)
 			}
 		})
 	}

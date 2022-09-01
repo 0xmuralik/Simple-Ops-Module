@@ -31,3 +31,11 @@ func (q Querier) GetRecord(c context.Context, req *types.QueryRecordRequest) (*t
 		Record: &record,
 	}, nil
 }
+
+func (q Querier) GetRecordCounter(c context.Context, req *types.QueryRecordCounterRequest) (*types.QueryRecordCounterResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	counter := q.Keeper.GetRecordCounter(ctx)
+	return &types.QueryRecordCounterResponse{
+		Counter: counter,
+	}, nil
+}

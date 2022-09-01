@@ -20,6 +20,7 @@ func GetQueryCmd() *cobra.Command {
 	opsQueryCmd.AddCommand(
 		GetRecordByIDCmd(),
 		ListRecorsCmd(),
+		GetRecordCounterCmd(),
 	)
 
 	return opsQueryCmd
@@ -65,6 +66,30 @@ func ListRecorsCmd() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			res, err := queryClient.ListRecords(cmd.Context(), &types.QueryAllRecordsRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+
+func GetRecordCounterCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "counter",
+		Args:  cobra.NoArgs,
+		Short: "get record counter",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.GetRecordCounter(cmd.Context(), &types.QueryRecordCounterRequest{})
 			if err != nil {
 				return err
 			}
